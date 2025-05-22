@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flask Chat Client</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <h1>Flask Chat with Mistral-7B</h1>
+    <div class="controls">
+      <div class="prompt-select">
+        <label for="savedPrompts">Saved Prompts:</label>
+        <select id="savedPrompts">
+          <option value="">-- choose prompt --</option>
+        </select>
+      </div>
+      <div class="custom-prompt">
+        <label for="customPrompt">Or enter custom prompt:</label>
+        <textarea id="customPrompt" rows="2"></textarea>
+      </div>
+      <div class="save-prompt">
+        <input type="text" id="newPromptKey" placeholder="Prompt key (no spaces)" />
+        <button id="saveBtn">Save to Prompts</button>
+      </div>
+      <button id="sendBtn">Send</button>
+      <button id="resetBtn">Reset Memory</button>
+    </div>
+    <div id="chatLog" class="chat-log"></div>
+  </div>
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

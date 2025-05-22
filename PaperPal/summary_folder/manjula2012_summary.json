@@ -1,0 +1,36 @@
+{
+  "title": "Design of Micro Power CMOS LNA for Healthcare Applications",
+  "institution": "Mepco Schlenk Engineering College, Sivakasi-626005, Tamilnadu, India",
+  "year": "미기재 (최근 연도로 추정)",
+  "key_findings": [
+    {
+      "conclusion": "시뮬레이션 결과, 15 dB gain, -13 dB return loss, 3.6 dB Noise Figure 및 -24 dBm 입력 1 dB 압축 지점을 보여줌",
+      "evidence": "RF 수신기 전단용으로 TSMC 0.13μm CMOS 공정을 사용하여 0.5mW 전력 소비"
+    },
+    {
+      "conclusion": "제안된 LNA 디자인은 전력, 면적 및 비용을 절약함",
+      "evidence": "카스코드 토폴로지를 사용하여 중간 역전 영역에서 동작하며 저전력 소비, 적은 면적 및 낮은 비용을 달성"
+    }
+  ],
+  "applicable_situations": [
+    {
+      "situation": "의료 응용 프로그램에서 웨어러블 기기의 RF 수신기에 대한 저전력 소비 솔루션 필요",
+      "advice": "의료 응용 프로그램에서 저전력 소비가 중요한 경우, TSMC 0.13μm CMOS 공정을 사용한 LNA 디자인이 유용할 수 있음"
+    },
+    {
+      "situation": "무선 응용 프로그램의 배터리 수명 연장이 필요한 경우",
+      "advice": "무선 응용 프로그램의 배터리 수명을 연장하기 위해 저전력 RFIC가 필요한 경우, 카스코드 토폴로지를 사용한 LNA 디자인이 적합할 수 있음"
+    }
+  ],
+  "categories": [
+    "RFIC Design",
+    "CMOS Technology"
+  ],
+  "keywords": [
+    "wearable devices",
+    "LNA",
+    "Power Consumption",
+    "RF receiver",
+    "CMOS"
+  ]
+}

@@ -1,0 +1,303 @@
+Sector,Ticker,PER
+SPY,SPY,22.451712
+SPY,SECTOR_AVG,22.451712
+IT,AAPL,21.836342
+IT,MSFT,23.937122
+IT,ORCL,17.759777
+IT,CRM,21.941599
+IT,ADBE,16.579077
+IT,IBM,21.279924
+IT,CSCO,13.951282
+IT,ACN,20.235964
+IT,NOW,44.041916
+IT,INTU,25.022043
+IT,PLTR,165.61702
+IT,ANET,7.0061665
+IT,PANW,21.172224
+IT,SAP,35.783703
+IT,UBER,27.81356
+IT,SNOW,140.90321
+IT,DELL,7.9787235
+IT,HPQ,6.4944444
+IT,HPE,6.3476195
+IT,SECTOR_AVG,33.98430088947369
+Communication Services,GOOGL,16.378347
+Communication Services,META,20.405138
+Communication Services,NFLX,36.494114
+Communication Services,TMUS,23.118088
+Communication Services,DIS,16.174757
+Communication Services,T,11.977678
+Communication Services,VZ,9.002114
+Communication Services,CMCSA,7.6415524
+Communication Services,CHTR,9.303802
+Communication Services,EA,15.781946
+Communication Services,TTWO,25.195152
+Communication Services,LYV,49.268597
+Communication Services,FOXA,13.016086
+Communication Services,NWS,27.273632
+Communication Services,OMC,8.28125
+Communication Services,IPG,8.465455
+Communication Services,MTCH,11.229838
+Communication Services,PARA,6.6625767
+Communication Services,SNAP,18.853659
+Communication Services,SECTOR_AVG,17.60651484736842
+Consumer Discretionary,HD,21.891666
+Consumer Discretionary,MCD,23.781921
+Consumer Discretionary,NKE,17.216719
+Consumer Discretionary,SBUX,21.505377
+Consumer Discretionary,BKNG,20.227211
+Consumer Discretionary,TGT,8.980019
+Consumer Discretionary,LOW,17.176563
+Consumer Discretionary,TJX,25.897825
+Consumer Discretionary,CMG,35.625954
+Consumer Discretionary,YUM,23.83717
+Consumer Discretionary,MAR,20.128302
+Consumer Discretionary,HLT,25.549437
+Consumer Discretionary,EL,19.61111
+Consumer Discretionary,ROST,19.115097
+Consumer Discretionary,DG,14.794212
+Consumer Discretionary,ULTA,14.994752
+Consumer Discretionary,ORLY,29.680464
+Consumer Discretionary,LVS,11.672727
+Consumer Discretionary,EBAY,11.722222
+Consumer Discretionary,SECTOR_AVG,20.179407789473682
+Consumer Staples,WMT,30.819853
+Consumer Staples,COST,46.144817
+Consumer Staples,PG,21.59434
+Consumer Staples,KO,23.020203
+Consumer Staples,PM,21.004168
+Consumer Staples,PEP,16.592121
+Consumer Staples,MO,10.403738
+Consumer Staples,MDLZ,19.017494
+Consumer Staples,CL,23.106218
+Consumer Staples,KHC,9.29316
+Consumer Staples,KMB,17.633026
+Consumer Staples,GIS,12.474469
+Consumer Staples,WBA,7.285714
+Consumer Staples,KR,14.510917
+Consumer Staples,UL,16.542858
+Consumer Staples,BUD,15.847593
+Consumer Staples,DEO,14.1754875
+Consumer Staples,BTI,8.389362
+Consumer Staples,ADM,8.477317
+Consumer Staples,TSN,16.637142
+Consumer Staples,SECTOR_AVG,17.648499874999995
+Financials,BRK-B,24.421314
+Financials,JPM,12.810036
+Financials,V,24.669827
+Financials,MA,29.641026
+Financials,BAC,9.721312
+Financials,WFC,11.324226
+Financials,MS,12.726356
+Financials,AXP,15.494709
+Financials,GS,11.200914
+Financials,BX,21.380789
+Financials,SPGI,26.074362
+Financials,C,8.1849785
+Financials,PGR,18.497826
+Financials,BLK,16.649694
+Financials,SCHW,18.43158
+Financials,CB,11.618806
+Financials,MMC,23.726404
+Financials,CME,24.336548
+Financials,AIG,11.5588665
+Financials,PYPL,11.969325
+Financials,SECTOR_AVG,17.22194495
+Healthcare,UNH,17.548496
+Healthcare,CVS,9.8533945
+Healthcare,ELV,12.10701
+Healthcare,CI,10.069924
+Healthcare,HUM,15.125298
+Healthcare,MDT,14.2136755
+Healthcare,ABT,24.197676
+Healthcare,TMO,18.640697
+Healthcare,DHR,21.553698
+Healthcare,MCK,17.983427
+Healthcare,CAH,14.546296
+Healthcare,ISRG,58.98473
+Healthcare,SYK,25.524021
+Healthcare,BDX,13.037508
+Healthcare,HCA,13.426885
+Healthcare,BSX,32.810036
+Healthcare,EW,28.163265
+Healthcare,GEHC,13.0599575
+Healthcare,LH,13.95131
+Healthcare,SECTOR_AVG,19.72617392105263
+Pharmaceuticals & Biotechnology,JNJ,14.209433
+Pharmaceuticals & Biotechnology,LLY,31.938658
+Pharmaceuticals & Biotechnology,NVO,15.636363
+Pharmaceuticals & Biotechnology,ABBV,15.379225
+Pharmaceuticals & Biotechnology,MRK,8.63617
+Pharmaceuticals & Biotechnology,PFE,7.723549
+Pharmaceuticals & Biotechnology,AMGN,14.0149975
+Pharmaceuticals & Biotechnology,BMY,7.85064
+Pharmaceuticals & Biotechnology,AZN,11.983607
+Pharmaceuticals & Biotechnology,NVS,12.2173395
+Pharmaceuticals & Biotechnology,GSK,8.102325
+Pharmaceuticals & Biotechnology,SNY,10.275303
+Pharmaceuticals & Biotechnology,GILD,14.201884
+Pharmaceuticals & Biotechnology,REGN,12.641359
+Pharmaceuticals & Biotechnology,VRTX,25.282898
+Pharmaceuticals & Biotechnology,BIIB,7.154262
+Pharmaceuticals & Biotechnology,ZTS,23.517351
+Pharmaceuticals & Biotechnology,TAK,27.132076
+Pharmaceuticals & Biotechnology,SECTOR_AVG,14.88319111111111
+Industrials,GE,32.00382
+Industrials,CAT,12.643792
+Industrials,RTX,19.20131
+Industrials,UNP,17.338564
+Industrials,HON,17.02634
+Industrials,BA,295.4468
+Industrials,DE,19.095625
+Industrials,LMT,15.326219
+Industrials,UPS,10.846765
+Industrials,FDX,9.021099
+Industrials,MMM,16.272152
+Industrials,ITW,20.7243
+Industrials,GD,15.402985
+Industrials,NOC,17.162153
+Industrials,WM,27.330856
+Industrials,CSX,13.344828
+Industrials,NSC,15.320324
+Industrials,DAL,5.311966
+Industrials,LUV,16.327044
+Industrials,AAL,4.8069305
+Industrials,SECTOR_AVG,29.997693625
+Energy,XOM,13.080051
+Energy,CVX,12.694746
+Energy,COP,10.668742
+Energy,SHEL,7.928753
+Energy,BP,7.206897
+Energy,EOG,9.858047
+Energy,OXY,12.262658
+Energy,SLB,9.029972
+Energy,MPC,11.927451
+Energy,VLO,11.053886
+Energy,PSX,10.178082
+Energy,KMI,20.134922
+Energy,WMB,26.244019
+Energy,ET,10.044304
+Energy,LNG,17.877983
+Energy,DVN,6.4147983
+Energy,HAL,6.150769
+Energy,BKR,13.894941
+Energy,ENB,19.602802
+Energy,SECTOR_AVG,12.43441175263158
+Materials,LIN,25.124481
+Materials,SHW,25.258999
+Materials,APD,18.28511
+Materials,ECL,30.710667
+Materials,DOW,8.848875
+Materials,DD,13.161732
+Materials,NEM,11.712794
+Materials,FCX,14.060185
+Materials,SCCO,16.507277
+Materials,NUE,11.214745
+Materials,RIO,8.0
+Materials,BHP,9.57466
+Materials,VALE,4.3073173
+Materials,CTVA,17.311525
+Materials,PPG,10.952542
+Materials,LYB,6.5737514
+Materials,ALB,31.576086
+Materials,GOLD,9.692307
+Materials,NTR,12.574074
+Materials,STLD,11.059761
+Materials,SECTOR_AVG,14.825344435
+Utilities,NEE,17.679346
+Utilities,SO,20.189814
+Utilities,DUK,18.432177
+Utilities,CEG,20.088268
+Utilities,SRE,12.433852
+Utilities,AEP,17.244482
+Utilities,D,15.038462
+Utilities,EXC,16.992393
+Utilities,XEL,17.509138
+Utilities,ED,18.75445
+Utilities,PCG,10.864864
+Utilities,PEG,18.95086
+Utilities,WEC,19.772032
+Utilities,ES,11.623431
+Utilities,EIX,9.407018
+Utilities,ETR,10.250646
+Utilities,DTE,17.746185
+Utilities,FE,13.394463
+Utilities,AES,5.26601
+Utilities,NGG,12.942387
+Utilities,SECTOR_AVG,15.229013899999998
+Real Estate,PLD,26.852272
+Real Estate,AMT,31.4271
+Real Estate,EQIX,55.884903
+Real Estate,WELL,76.269226
+Real Estate,SPG,21.141592
+Real Estate,CCI,36.64552
+Real Estate,PSA,25.93509
+Real Estate,O,33.289307
+Real Estate,DLR,112.95041
+Real Estate,SBAC,23.38386
+Real Estate,AVB,34.081226
+Real Estate,EQR,36.994083
+Real Estate,WY,29.627907
+Real Estate,VICI,10.901099
+Real Estate,EXR,27.694561
+Real Estate,ARE,22.619184
+Real Estate,BXP,31.278076
+Real Estate,INVH,42.48649
+Real Estate,KIM,27.314287
+Real Estate,IRM,39.55612
+Real Estate,SECTOR_AVG,37.31661565
+Semiconductors,NVDA,23.69903
+Semiconductors,TSM,18.090347
+Semiconductors,AVGO,24.982172
+Semiconductors,ASML,23.065168
+Semiconductors,INTC,20.175257
+Semiconductors,AMD,16.4
+Semiconductors,QCOM,10.606706
+Semiconductors,TXN,26.190475
+Semiconductors,AMAT,13.7100115
+Semiconductors,ADI,22.724138
+Semiconductors,MU,5.3123546
+Semiconductors,LRCX,14.566745
+Semiconductors,KLAC,18.422304
+Semiconductors,MRVL,20.4
+Semiconductors,CDNS,34.134308
+Semiconductors,SNPS,25.615334
+Semiconductors,ON,8.120371
+Semiconductors,MCHP,14.650001
+Semiconductors,STM,13.589928
+Semiconductors,GFS,17.994413
+Semiconductors,SECTOR_AVG,18.622453154999995
+Automotive & EV,TSLA,72.00308
+Automotive & EV,TM,10.160963
+Automotive & EV,BYDDF,1.6411906
+Automotive & EV,VWAGY,3.2432432
+Automotive & EV,MBGAF,5.1282053
+Automotive & EV,GM,4.1182594
+Automotive & EV,F,5.2799997
+Automotive & EV,STLA,3.1073825
+Automotive & EV,HMC,5.108871
+Automotive & EV,RACE,41.836308
+Automotive & EV,LI,13.967533
+Automotive & EV,NSANY,5.0697675
+Automotive & EV,HYMTF,2.777512
+Automotive & EV,SECTOR_AVG,13.341716553846153
+Retail & E-commerce,AMZN,28.49756
+Retail & E-commerce,WMT,30.819853
+Retail & E-commerce,BABA,10.737589
+Retail & E-commerce,COST,46.144817
+Retail & E-commerce,HD,21.891666
+Retail & E-commerce,TGT,8.980019
+Retail & E-commerce,JD,8.434782
+Retail & E-commerce,LOW,17.176563
+Retail & E-commerce,EBAY,11.722222
+Retail & E-commerce,WBA,7.285714
+Retail & E-commerce,CVS,9.8533945
+Retail & E-commerce,MELI,37.096527
+Retail & E-commerce,TJX,25.897825
+Retail & E-commerce,DG,14.794212
+Retail & E-commerce,DLTR,12.019801
+Retail & E-commerce,PDD,7.097942
+Retail & E-commerce,SHOP,42.605404
+Retail & E-commerce,KR,14.510917
+Retail & E-commerce,SVNDY,46.928574
+Retail & E-commerce,SECTOR_AVG,21.18396744736842

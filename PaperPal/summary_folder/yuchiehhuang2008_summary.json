@@ -1,0 +1,34 @@
+{
+  "title": "Orientation Invariant Diverstiy Gain Using Transmit Polarization Diversity",
+  "institution": "Queensland University of Technology",
+  "year": "미기재 (최근 연도로 추정)",
+  "key_findings": [
+    {
+      "conclusion": "Circular polarization 사용 시, 수직 및 수평 극성 간의 가지는 전력 불균형이 선형 극성보다 상당히 낮아지며, 교차 극성 감별이 송신기 방향과 독립적이 됨.",
+      "evidence": "분석 결과에 따르면, 원형 극성을 사용하면 수직 및 수평 극성 간의 가지는 전력 불균형이 선형 극성보다 상당히 낮아지며, 교차 극성 감별이 송신기 방향과 독립적이 됨."
+    },
+    {
+      "conclusion": "분기 전력 불균형을 보상하기 위해 특별한 수신 안테나 구성을 제안하며, 이는 수직 및 수평 극성 간의 평균 신호 수준을 균등화하고 다양성을 줄이는 대신 다양성 가지 사이의 소멸 상관을 증가시킴.",
+      "evidence": "Kozono 등은 특별한 수신 안테나 구성을 제안하여 수직 및 수평 극성 간의 평균 신호 수준을 균등화하고 다양성을 줄이는 대신 다양성 가지 사이의 소멸 상관을 증가시킴."
+    }
+  ],
+  "applicable_situations": [
+    {
+      "situation": "무선 통신에서 다양성 기술을 개선하고자 하는 경우",
+      "advice": "원형 극성을 사용하여 수직 및 수평 극성 간의 전력 불균형을 줄이고 교차 극성 감별을 개선할 수 있음."
+    },
+    {
+      "situation": "다양한 안테나 구성을 고려하는 무선 통신 시스템 설계",
+      "advice": "수신 안테나 구성을 조정하여 수직 및 수평 극성 간의 평균 신호 수준을 균등화하고 다양성 가지 사이의 소멸 상관을 조절할 수 있음."
+    }
+  ],
+  "categories": [
+    "무선 통신",
+    "안테나 이론"
+  ],
+  "keywords": [
+    "극성 다양성",
+    "원형 극성",
+    "안테나 구성"
+  ]
+}

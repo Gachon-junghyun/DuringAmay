@@ -1,0 +1,36 @@
+{
+  "title": "Effects of the insurmountable angiotensin AT receptor antagonist candesartan and the surmountable antagonist losartan on ischemia-reperfusion injury in rat hearts",
+  "institution": "Astra Hassle, Sweden",
+  "year": "1999",
+  "key_findings": [
+    {
+      "conclusion": "Pre-treatment with candesartan 10nM or losartan 3mM immediately prior to ischemia improved the recovery of left ventricular developed pressure as compared to the effect of vehicle (69±3.2% and 64±2.3 vs. 44±6.2%, respectively; P<0.05).",
+      "evidence": "Results from hearts subjected to 25 min of global ischemia and 45 min of reperfusion."
+    },
+    {
+      "conclusion": "The cumulative creatine kinase release during the first 30 min of reperfusion in the washout experiments was lower in the candesartan group (28.5±2.30 U, P<0.05), but not in the losartan group (40.8±6.73 U), than in the vehicle group (48.1±4.35 U).",
+      "evidence": "Data from the washout experiments after drug administration."
+    }
+  ],
+  "applicable_situations": [
+    {
+      "situation": "Patients undergoing ischemia-reperfusion injury treatment",
+      "advice": "Consider pre-treatment with candesartan or losartan to improve left ventricular developed pressure recovery and reduce creatine kinase release."
+    },
+    {
+      "situation": "Research on angiotensin AT1 receptor antagonists",
+      "advice": "Focus on the differences in cardioprotective effects between insurmountable and surmountable receptor antagonists."
+    }
+  ],
+  "categories": [
+    "Pharmacology",
+    "Cardiology"
+  ],
+  "keywords": [
+    "Angiotensin II",
+    "Ischemia",
+    "Reperfusion",
+    "Myocardium",
+    "Vasoconstriction"
+  ]
+}

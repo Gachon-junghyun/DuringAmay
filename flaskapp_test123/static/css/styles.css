@@ -1,0 +1,58 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+.chat-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.prompt-select, .custom-prompt, .save-prompt {
+  display: flex;
+  flex-direction: column;
+}
+textarea, input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+#saveBtn { background: #28a745; color: #fff; }
+#sendBtn { background: #007bff; color: #fff; }
+#resetBtn { background: #dc3545; color: #fff; }
+.chat-log {
+  margin-top: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+.chat-message {
+  margin-bottom: 1rem;
+}
+.chat-message.user { text-align: right; }
+.chat-message.assistant { text-align: left; }
+.chat-message span {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+.chat-message.user span { background: #e0f7fa; }
+.chat-message.assistant span { background: #e8eaf6; }

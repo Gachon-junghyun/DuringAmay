@@ -1,0 +1,87 @@
+from flask import Flask, request, jsonify, session, render_template
+from flask_cors import CORS
+# from transformers import AutoTokenizer, AutoModelForCausalLM
+# import torch
+import uuid
+
+app = Flask(__name__, template_folder='templates', static_folder='static')
+app.secret_key = 'your-secret-key'
+CORS(app, supports_credentials=True)
+
+# model_name = "TheBloke/Mistral-7B-Instruct-v0.1-GPTQ"
+
+# tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     device_map="auto",
+#     torch_dtype=torch.float16,
+#     low_cpu_mem_usage=True,
+#     trust_remote_code=True
+# )
+
+# Stored prompts
+saved_prompts = {
+    "supervised_vs_unsupervised": "Explain the difference between supervised and unsupervised learning.",
+}
+
+# In-memory memory
+memory_store = {}
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/prompts', methods=['GET'])
+def get_prompts():
+    return jsonify({"prompts": saved_prompts})
+
+@app.route('/prompts', methods=['POST'])
+def add_prompt():
+    data = request.get_json() or {}
+    key = data.get('key')
+    prompt_text = data.get('prompt')
+    if not key or not prompt_text:
+        return jsonify({"error": "Both 'key' and 'prompt' are required."}), 400
+    if key in saved_prompts:
+        return jsonify({"error": "Key already exists."}), 400
+    saved_prompts[key] = prompt_text
+    return jsonify({"status": "prompt added", "prompts": saved_prompts})
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json() or {}
+    prompt_id = data.get("prompt_id")
+    custom_text = data.get("prompt")
+
+    # Build full prompt: combine base and custom text if present
+    base = saved_prompts.get(prompt_id, "") if prompt_id else ""
+    parts = [base, custom_text or ""]
+    full_prompt = "\n".join([p for p in parts if p])
+    if not full_prompt:
+        return jsonify({"error": "No prompt provided"}), 400
+
+    # Session memory
+    session_id = session.get("session_id") or str(uuid.uuid4())
+    session["session_id"] = session_id
+    memory_store.setdefault(session_id, []).append({"role": "user", "content": full_prompt})
+
+    # 더미 응답 생성
+    response_text = f"더미 응답: {full_prompt}에 대한 응답입니다."
+
+    memory_store[session_id].append({"role": "assistant", "content": response_text})
+    return jsonify({"response": response_text})
+
+@app.route('/memory', methods=['GET'])
+def get_memory():
+    session_id = session.get("session_id")
+    return jsonify({"memory": memory_store.get(session_id, [])})
+
+@app.route('/memory/reset', methods=['POST'])
+def reset_memory():
+    session_id = session.get("session_id")
+    if session_id in memory_store:
+        memory_store[session_id] = []
+    return jsonify({"status": "memory reset"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

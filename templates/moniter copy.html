@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식 모니터링 홈페이지</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Swiper CSS for card sliding -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <style>
+        .stock-banner {
+            background: linear-gradient(90deg, #253f5b, #1e2d3f);
+            color: white;
+        }
+        
+        .logo-card {
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .logo-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-card:hover .logo-overlay {
+            opacity: 0.3;
+        }
+        
+        .logo-card:hover .logo-name {
+            opacity: 1;
+        }
+        
+        .logo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .logo-name {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .news-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .swiper-container {
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 50px;
+        }
+        
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 200px;
+            height: 150px;
+        }
+
+        /* 알림 메시지 스타일 */
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+
+        /* 차트 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .period-buttons {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .period-button {
+            padding: 5px 15px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .period-button.active {
+            background-color: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- 네비게이션 바 -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="text-xl font-bold flex items-center">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        <span>스탁모니터</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="{{ url_for('index') }}" class="hover:text-blue-300 transition duration-300">홈</a>
+                    <a href="#" class="hover:text-blue-300 transition duration-300">시장 동향</a>
+                    <a href="#" class="hover:text-blue-300 transition duration-300">관심 종목</a>
+                    <a href="#" class="hover:text-blue-300 transition duration-300">뉴스</a>
+                    <a href="#" class="hover:text-blue-300 transition duration-300">분석 도구</a>
+                </div>
+                
+                <div class="md:hidden">
+                    <button class="focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#" class="hover:text-blue-300 transition duration-300">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <a href="#" class="hover:text-blue-300 transition duration-300">
+                        <i class="fas fa-bell"></i>
+                    </a>
+                    <a href="#" class="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-lg transition duration-300">
+                        로그인
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 알림 메시지 표시 -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="container mx-auto px-4 mt-4">
+          {% for message in messages %}
+            <div class="flash-message">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- 배너 (어제 관련 일 표시) -->
+    <div class="stock-banner py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-3 md:mb-0">
+                    <h2 class="text-xl font-bold">{{ current_date }} 마감 요약</h2>
+                    <p class="text-gray-200">
+                        코스피: <span class="{{ 'text-green-400' if market_data.kospi.startswith('+') else 'text-red-400' }}">{{ market_data.kospi }}</span> | 
+                        코스닥: <span class="{{ 'text-green-400' if market_data.kosdaq.startswith('+') else 'text-red-400' }}">{{ market_data.kosdaq }}</span> | 
+                        다우: <span class="{{ 'text-green-400' if market_data.dow.startswith('+') else 'text-red-400' }}">{{ market_data.dow }}</span>
+                    </p>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-300">달러/원</p>
+                        <p class="font-bold">{{ market_data.dollar }}</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-300">유가(WTI)</p>
+                        <p class="font-bold">{{ market_data.oil }}</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-300">금</p>
+                        <p class="font-bold">{{ market_data.gold }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관심종목 섹션 -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">주요 관심종목</h3>
+            <button id="addStockBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition duration-300">
+                <i class="fas fa-plus mr-1"></i> 종목 추가
+            </button>
+        </div>
+        
+        <!-- 종목 추가 폼 (기본적으로 숨김) -->
+        <div id="addStockForm" class="bg-white rounded-lg shadow-md p-4 mb-4" style="display:none;">
+            <h4 class="font-bold mb-3">새 종목 추가</h4>
+            <form action="{{ url_for('add_stock') }}" method="POST">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">종목 코드</label>
+                        <input type="text" name="code" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="예: 005930" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">종목명</label>
+                        <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="예: 삼성전자" required>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex justify-end">
+                    <button type="button" id="cancelAddStock" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md mr-2">취소</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">추가</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 로고 업로드 폼 (기본적으로 숨김) -->
+        <div id="uploadLogoForm" class="bg-white rounded-lg shadow-md p-4 mb-4" style="display:none;">
+            <h4 class="font-bold mb-3">종목 로고 업로드</h4>
+            <form action="{{ url_for('upload_logo') }}" method="POST" enctype="multipart/form-data">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">종목 코드</label>
+                        <input type="text" name="code" id="logoStockCode" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="예: 005930" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">로고 파일</label>
+                        <input type="file" name="logo" class="w-full px-3 py-2 border border-gray-300 rounded-md" required accept="image/*">
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex justify-end">
+                    <button type="button" id="cancelUploadLogo" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md mr-2">취소</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">업로드</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 관심종목 카드 슬라이더 -->
+        <div class="swiper-container mySwiper">
+            <div class="swiper-wrapper">
+                {% for stock in stocks %}
+                <div class="swiper-slide">
+                    <div class="logo-card bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center">
+                        <div class="flex justify-end w-full mb-2">
+                            <button class="text-gray-500 hover:text-red-500 upload-logo" data-code="{{ stock.code }}">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                            <a href="{{ url_for('remove_stock', code=stock.code) }}" class="text-gray-500 hover:text-red-500 ml-2">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </div>
+                        <img src="{{ url_for('static', filename='company_logos/' + stock.logo) }}" alt="{{ stock.name }} 로고" class="h-16 w-auto mb-2">
+                        <div class="text-center mt-2">
+                            <p class="font-bold">{{ stock.name }}</p>
+                            <p class="{{ 'text-green-500' if stock.change.startswith('+') else 'text-red-500' }}">
+                                {{ stock.change }}
+                            </p>
+                        </div>
+                        <button class="mt-2 px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md text-sm view-chart" data-code="{{ stock.code }}">
+                            차트 보기
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <!-- 뉴스 카드 및 브리핑 카드 섹션 -->
+    <div class="container mx-auto px-4 py-6">
+        <h3 class="text-xl font-bold mb-4">최신 주식 뉴스</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for article in news %}
+            <div class="news-card bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="{{ url_for('static', filename=article.image) }}" alt="뉴스 이미지" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <span class="text-sm {{ 'text-blue-600' if article.category == '경제 일반' else 'text-green-600' }} font-semibold">{{ article.category }}</span>
+                    <h4 class="font-bold text-lg mt-1">{{ article.title }}</h4>
+                    <p class="text-gray-600 mt-2">{{ article.summary }}</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-sm text-gray-500">{{ article.date }}</span>
+                        <a href="#" class="text-blue-600 hover:underline text-sm">자세히 보기</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- 브리핑 카드 -->
+            <div class="news-card bg-blue-50 rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <h4 class="font-bold text-lg text-blue-800">오늘의 시장 브리핑</h4>
+                    <ul class="mt-4 space-y-3">
+                        {% for item in market_briefing %}
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2">•</span>
+                            <p class="text-gray-700">{{ item }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="mt-6">
+                        <a href="#" class="text-blue-600 hover:underline text-sm flex items-center">
+                            더 많은 브리핑 보기
+                            <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 차트 모달 -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="chartTitle" class="text-xl font-bold mb-2">주가 차트</h2>
+            <div class="period-buttons">
+                <span class="period-button" data-period="1d">1일</span>
+                <span class="period-button" data-period="1w">1주</span>
+                <span class="period-button active" data-period="1m">1개월</span>
+                <span class="period-button" data-period="3m">3개월</span>
+                <span class="period-button" data-period="1y">1년</span>
+            </div>
+            <div id="chartContainer">
+                <img id="stockChart" src="" alt="주가 차트" class="w-full">
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap, Swiper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+    
+    <script>
+        // 슬라이더 초기화 - 2초마다 자동으로 슬라이드 설정
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            // 자동 슬라이드 설정 추가
+            autoplay: {
+                delay: 2000, // 2초 설정
+                disableOnInteraction: false, // 사용자 상호작용 후에도 자동 재생 유지
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                },
+                1024: {
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                },
+            },
+        });
+
+        // 종목 추가 폼 토글
+        document.getElementById('addStockBtn').addEventListener('click', function() {
+            document.getElementById('addStockForm').style.display = 'block';
+        });
+
+        document.getElementById('cancelAddStock').addEventListener('click', function() {
+            document.getElementById('addStockForm').style.display = 'none';
+        });
+
+        // 로고 업로드 폼 토글
+        let uploadLogoButtons = document.querySelectorAll('.upload-logo');
+        uploadLogoButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                let stockCode = this.getAttribute('data-code');
+                document.getElementById('logoStockCode').value = stockCode;
+                document.getElementById('uploadLogoForm').style.display = 'block';
+            });
+        });
+
+        document.getElementById('cancelUploadLogo').addEventListener('click', function() {
+            document.getElementById('uploadLogoForm').style.display = 'none';
+        });
+
+        // 차트 모달 관련 스크립트
+        let modal = document.getElementById('chartModal');
+        let closeBtn = document.getElementsByClassName('close-modal')[0];
+        let periodButtons = document.querySelectorAll('.period-button');
+        let currentStockCode = '';
+
+        // 차트 보기 버튼 이벤트
+        let chartButtons = document.querySelectorAll('.view-chart');
+        chartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                currentStockCode = this.getAttribute('data-code');
+                let stockName = this.closest('.logo-card').querySelector('p').innerText;
+                document.getElementById('chartTitle').innerText = `${stockName} (${currentStockCode}) 주가 차트`;
+                loadChart(currentStockCode, '1m'); // 기본값 1개월
+                modal.style.display = 'block';
+            });
+        });
+
+        // 모달 닫기
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // 모달 외부 클릭 시 닫기
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // 기간 버튼 클릭 이벤트
+        periodButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 활성 버튼 스타일 변경
+                periodButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 새 기간으로 차트 불러오기
+                let period = this.getAttribute('data-period');
+                loadChart(currentStockCode, period);
+            });
+        });
+
+        // 차트 로딩 함수
+        function loadChart(code, period) {
+            fetch(`/stock_chart/${code}?period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('stockChart').src = data.chart;
+                })
+                .catch(error => console.error('차트 로딩 실패:', error));
+        }
+
+        // 플래시 메시지 자동 숨김
+        setTimeout(function() {
+            let flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                message.style.display = 'none';
+            });
+        }, 5000); // 5초 후 숨김
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "title": "Brain State-Dependent Closed-Loop Modulation of Paired Associative Stimulation Controlled by Sensorimotor Desynchronization",
+  "institution": "Eberhard Karls University Tuebingen, Germany",
+  "year": "2016",
+  "key_findings": [
+    {
+      "conclusion": "The application of approximately 150 pairs of associative FES and TMS resulted in a significant increase of MEP amplitudes and AUC, indicating that the induced increase of corticospinal excitability was mediated by the recruitment of additional neuronal pools.",
+      "evidence": "MEP increases were brain state-dependent and correlated with beta-band ERD, but not with the background EDC muscle activity; this finding was independent of the FES intensity applied."
+    }
+  ],
+  "applicable_situations": [
+    {
+      "situation": "Neurorehabilitation",
+      "advice": "Developing closed-loop therapeutic approaches such as the application of brain state-dependent, paired associative stimulation (PAS) could be beneficial."
+    }
+  ],
+  "categories": [
+    "Neuroscience",
+    "Neurorehabilitation"
+  ],
+  "keywords": [
+    "transcranial magnetic stimulation",
+    "neuromuscular electric stimulation",
+    "brain-machine interface",
+    "brain-computer interface",
+    "motor cortex plasticity",
+    "beta-band",
+    "brain state-dependent stimulation",
+    "closed-loop stimulation"
+  ]
+}

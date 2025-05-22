@@ -1,0 +1,31 @@
+{
+  "title": "Quantitative Autoradiographic Localization of Cholecystokinin Receptors in Rat and Guinea Pig Brain Using 125I-Bolton-Hunter-CCK8",
+  "institution": "Abbott Laboratories",
+  "year": "1989",
+  "key_findings": [
+    {
+      "conclusion": "Statistically significant differences in receptor binding between rat and guinea pig occurred in olfactory bulb, caudate-putamen, amygdala, several cortical areas, ventromedial hypothalamus, cerebellum, and a number of midbrain and brainstem nuclei.",
+      "evidence": "Results of the comparative quantitative autoradiographic analysis using 125I-Bolton-Hunter-CCK8."
+    }
+  ],
+  "applicable_situations": [
+    {
+      "situation": "Brain research comparing receptor distribution in different species",
+      "advice": "Consider using quantitative autoradiography to study receptor distribution in different brain regions of various mammalian species."
+    },
+    {
+      "situation": "Pharmacological studies on CCK receptors",
+      "advice": "Use 125I-Bolton-Hunter-CCK8 for comparative analysis of CCK receptor binding in different brain regions."
+    }
+  ],
+  "categories": [
+    "Neuroscience",
+    "Pharmacology"
+  ],
+  "keywords": [
+    "Cholecystokinin",
+    "Autoradiography",
+    "Receptor distribution",
+    "Species differences"
+  ]
+}
