@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>베이지안 업데이트 시각화</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #00d2ff;
+            border-bottom: 2px solid #00d2ff;
+            padding-bottom: 8px;
+        }
+
+        .distribution-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .distribution-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+            transition: transform 0.2s;
+        }
+
+        .distribution-item:hover {
+            transform: translateX(5px);
+        }
+
+        .distribution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .distribution-name {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .distribution-type {
+            font-size: 0.8rem;
+            color: #888;
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            border: none;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #ff6b81;
+            transform: scale(1.1);
+        }
+
+        .slider-group {
+            margin-bottom: 12px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .slider-value {
+            color: #00d2ff;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #00d2ff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px #00d2ff;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .add-prior {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .add-likelihood {
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 500px;
+        }
+
+        .info-box {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .info-title {
+            color: #00d2ff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            text-align: center;
+            color: #00d2ff;
+        }
+
+        .posterior-info {
+            background: rgba(46, 213, 115, 0.1);
+            border: 1px solid rgba(46, 213, 115, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .posterior-title {
+            color: #2ed573;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-label {
+            color: #888;
+        }
+
+        .stat-value {
+            color: #2ed573;
+            font-weight: bold;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-color: transparent;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 베이지안 업데이트 시각화</h1>
+        <p class="subtitle">정규분포의 사전확률, 우도함수, 사후확률을 시각적으로 이해하기</p>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h2 class="section-title">분포 관리</h2>
+
+                <div class="toggle-group">
+                    <button class="toggle-btn active" id="modeUpdate">베이지안 업데이트</button>
+                    <button class="toggle-btn" id="modeMixture">혼합 분포</button>
+                </div>
+
+                <button class="add-btn add-prior" onclick="addDistribution('prior')">
+                    ➕ 사전확률 추가 (Prior)
+                </button>
+                <button class="add-btn add-likelihood" onclick="addDistribution('likelihood')">
+                    ➕ 우도함수 추가 (Likelihood)
+                </button>
+
+                <div class="distribution-list" id="distributionList">
+                    <!-- 분포 항목들이 여기에 추가됨 -->
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">📚 베이지안 업데이트란?</div>
+                    <div class="info-text">
+                        새로운 데이터(우도)가 주어졌을 때, 기존 믿음(사전확률)을
+                        업데이트하여 새로운 믿음(사후확률)을 계산합니다.
+                    </div>
+                    <div class="formula">
+                        P(θ|D) ∝ P(D|θ) × P(θ)
+                    </div>
+                    <div class="info-text">
+                        사후확률 ∝ 우도 × 사전확률
+                    </div>
+                </div>
+
+                <div class="posterior-info" id="posteriorInfo">
+                    <div class="posterior-title">📊 사후확률 통계</div>
+                    <div class="stat-row">
+                        <span class="stat-label">평균 (μ)</span>
+                        <span class="stat-value" id="posteriorMean">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">표준편차 (σ)</span>
+                        <span class="stat-value" id="posteriorStd">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">95% 신뢰구간</span>
+                        <span class="stat-value" id="posteriorCI">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="legend" id="legend">
+                    <!-- 범례가 동적으로 생성됨 -->
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 색상 팔레트
+        const priorColors = ['#667eea', '#764ba2', '#6B73FF', '#9b59b6'];
+        const likelihoodColors = ['#f093fb', '#f5576c', '#FF6B9D', '#e74c3c'];
+        const posteriorColor = '#2ed573';
+        const mixtureColor = '#ffa502';
+
+        // 분포 데이터 저장
+        let distributions = [];
+        let distributionCounter = 0;
+        let mode = 'update'; // 'update' or 'mixture'
+
+        // 차트 초기화
+        const ctx = document.getElementById('distributionChart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#00d2ff',
+                        bodyColor: '#fff',
+                        padding: 12,
+                        displayColors: true
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'θ (파라미터)',
+                            color: '#888'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#888'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: '확률 밀도',
+                            color: '#888'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#888'
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 정규분포 PDF 계산
+        function normalPDF(x, mean, std) {
+            const coefficient = 1 / (std * Math.sqrt(2 * Math.PI));
+            const exponent = -Math.pow(x - mean, 2) / (2 * Math.pow(std, 2));
+            return coefficient * Math.exp(exponent);
+        }
+
+        // X축 범위 계산
+        function calculateXRange() {
+            if (distributions.length === 0) {
+                return { min: -5, max: 5 };
+            }
+
+            let minMean = Infinity, maxMean = -Infinity;
+            let maxStd = 0;
+
+            distributions.forEach(d => {
+                minMean = Math.min(minMean, d.mean);
+                maxMean = Math.max(maxMean, d.mean);
+                maxStd = Math.max(maxStd, d.std);
+            });
+
+            const padding = Math.max(maxStd * 4, 3);
+            return {
+                min: minMean - padding,
+                max: maxMean + padding
+            };
+        }
+
+        // 분포 추가
+        function addDistribution(type) {
+            const id = ++distributionCounter;
+            const colorIndex = distributions.filter(d => d.type === type).length;
+            const colors = type === 'prior' ? priorColors : likelihoodColors;
+            const color = colors[colorIndex % colors.length];
+
+            const dist = {
+                id: id,
+                type: type,
+                name: type === 'prior' ? `사전확률 ${id}` : `우도 ${id}`,
+                mean: type === 'prior' ? 0 : 2,
+                std: type === 'prior' ? 2 : 1,
+                color: color
+            };
+
+            distributions.push(dist);
+            renderDistributionList();
+            updateChart();
+        }
+
+        // 분포 삭제
+        function removeDistribution(id) {
+            distributions = distributions.filter(d => d.id !== id);
+            renderDistributionList();
+            updateChart();
+        }
+
+        // 분포 파라미터 업데이트
+        function updateDistribution(id, param, value) {
+            const dist = distributions.find(d => d.id === id);
+            if (dist) {
+                dist[param] = parseFloat(value);
+                document.getElementById(`${param}Value_${id}`).textContent = value;
+                updateChart();
+            }
+        }
+
+        // 분포 목록 렌더링
+        function renderDistributionList() {
+            const container = document.getElementById('distributionList');
+            container.innerHTML = '';
+
+            distributions.forEach(dist => {
+                const item = document.createElement('div');
+                item.className = 'distribution-item';
+                item.style.borderLeftColor = dist.color;
+
+                item.innerHTML = `
+                    <div class="distribution-header">
+                        <div>
+                            <span class="distribution-name" style="color: ${dist.color}">${dist.name}</span>
+                            <span class="distribution-type">${dist.type === 'prior' ? '사전확률' : '우도'}</span>
+                        </div>
+                        <button class="delete-btn" onclick="removeDistribution(${dist.id})">×</button>
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>평균 (μ)</span>
+                            <span class="slider-value" id="meanValue_${dist.id}">${dist.mean}</span>
+                        </div>
+                        <input type="range" min="-10" max="10" step="0.1" value="${dist.mean}"
+                               onchange="updateDistribution(${dist.id}, 'mean', this.value)"
+                               oninput="updateDistribution(${dist.id}, 'mean', this.value)">
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>표준편차 (σ)</span>
+                            <span class="slider-value" id="stdValue_${dist.id}">${dist.std}</span>
+                        </div>
+                        <input type="range" min="0.1" max="5" step="0.1" value="${dist.std}"
+                               onchange="updateDistribution(${dist.id}, 'std', this.value)"
+                               oninput="updateDistribution(${dist.id}, 'std', this.value)">
+                    </div>
+                `;
+
+                container.appendChild(item);
+            });
+        }
+
+        // 베이지안 업데이트 계산 (정규분포 곱)
+        function calculatePosterior(xValues) {
+            const priors = distributions.filter(d => d.type === 'prior');
+            const likelihoods = distributions.filter(d => d.type === 'likelihood');
+
+            if (priors.length === 0 || likelihoods.length === 0) {
+                return null;
+            }
+
+            // 정규분포의 곱 = 새로운 정규분포
+            // 결합된 사전확률
+            let priorPrecision = 0;
+            let priorWeightedMean = 0;
+            priors.forEach(p => {
+                const precision = 1 / (p.std * p.std);
+                priorPrecision += precision;
+                priorWeightedMean += precision * p.mean;
+            });
+            const combinedPriorMean = priorWeightedMean / priorPrecision;
+            const combinedPriorStd = Math.sqrt(1 / priorPrecision);
+
+            // 결합된 우도
+            let likelihoodPrecision = 0;
+            let likelihoodWeightedMean = 0;
+            likelihoods.forEach(l => {
+                const precision = 1 / (l.std * l.std);
+                likelihoodPrecision += precision;
+                likelihoodWeightedMean += precision * l.mean;
+            });
+            const combinedLikelihoodMean = likelihoodWeightedMean / likelihoodPrecision;
+            const combinedLikelihoodStd = Math.sqrt(1 / likelihoodPrecision);
+
+            // 사후확률 계산
+            const posteriorPrecision = priorPrecision + likelihoodPrecision;
+            const posteriorMean = (priorWeightedMean + likelihoodWeightedMean) / posteriorPrecision;
+            const posteriorStd = Math.sqrt(1 / posteriorPrecision);
+
+            const posteriorValues = xValues.map(x => normalPDF(x, posteriorMean, posteriorStd));
+
+            return {
+                values: posteriorValues,
+                mean: posteriorMean,
+                std: posteriorStd
+            };
+        }
+
+        // 혼합 분포 계산
+        function calculateMixture(xValues) {
+            if (distributions.length === 0) {
+                return null;
+            }
+
+            const mixtureValues = xValues.map(x => {
+                let sum = 0;
+                distributions.forEach(d => {
+                    sum += normalPDF(x, d.mean, d.std);
+                });
+                return sum / distributions.length;
+            });
+
+            // 혼합 분포의 평균과 표준편차 (근사값)
+            let mean = 0;
+            distributions.forEach(d => {
+                mean += d.mean;
+            });
+            mean /= distributions.length;
+
+            let variance = 0;
+            distributions.forEach(d => {
+                variance += d.std * d.std + d.mean * d.mean;
+            });
+            variance = variance / distributions.length - mean * mean;
+
+            return {
+                values: mixtureValues,
+                mean: mean,
+                std: Math.sqrt(variance)
+            };
+        }
+
+        // 차트 업데이트
+        function updateChart() {
+            const range = calculateXRange();
+            const step = (range.max - range.min) / 200;
+            const xValues = [];
+            for (let x = range.min; x <= range.max; x += step) {
+                xValues.push(parseFloat(x.toFixed(2)));
+            }
+
+            const datasets = [];
+            const legendItems = [];
+
+            // 개별 분포 추가
+            distributions.forEach(dist => {
+                const yValues = xValues.map(x => normalPDF(x, dist.mean, dist.std));
+                datasets.push({
+                    label: dist.name,
+                    data: yValues,
+                    borderColor: dist.color,
+                    backgroundColor: dist.color + '20',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                });
+                legendItems.push({ name: dist.name, color: dist.color });
+            });
+
+            // 결과 분포 추가
+            if (mode === 'update') {
+                const posterior = calculatePosterior(xValues);
+                if (posterior) {
+                    datasets.push({
+                        label: '사후확률 (Posterior)',
+                        data: posterior.values,
+                        borderColor: posteriorColor,
+                        backgroundColor: posteriorColor + '30',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        borderDash: []
+                    });
+                    legendItems.push({ name: '사후확률', color: posteriorColor });
+
+                    // 통계 업데이트
+                    document.getElementById('posteriorMean').textContent = posterior.mean.toFixed(3);
+                    document.getElementById('posteriorStd').textContent = posterior.std.toFixed(3);
+                    const ci95Low = (posterior.mean - 1.96 * posterior.std).toFixed(3);
+                    const ci95High = (posterior.mean + 1.96 * posterior.std).toFixed(3);
+                    document.getElementById('posteriorCI').textContent = `[${ci95Low}, ${ci95High}]`;
+                } else {
+                    document.getElementById('posteriorMean').textContent = '-';
+                    document.getElementById('posteriorStd').textContent = '-';
+                    document.getElementById('posteriorCI').textContent = '-';
+                }
+            } else {
+                const mixture = calculateMixture(xValues);
+                if (mixture) {
+                    datasets.push({
+                        label: '혼합 분포 (Mixture)',
+                        data: mixture.values,
+                        borderColor: mixtureColor,
+                        backgroundColor: mixtureColor + '30',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    });
+                    legendItems.push({ name: '혼합 분포', color: mixtureColor });
+
+                    // 통계 업데이트
+                    document.getElementById('posteriorMean').textContent = mixture.mean.toFixed(3);
+                    document.getElementById('posteriorStd').textContent = mixture.std.toFixed(3);
+                    const ci95Low = (mixture.mean - 1.96 * mixture.std).toFixed(3);
+                    const ci95High = (mixture.mean + 1.96 * mixture.std).toFixed(3);
+                    document.getElementById('posteriorCI').textContent = `[${ci95Low}, ${ci95High}]`;
+                }
+            }
+
+            chart.data.labels = xValues;
+            chart.data.datasets = datasets;
+            chart.update('none');
+
+            // 범례 업데이트
+            updateLegend(legendItems);
+        }
+
+        // 범례 업데이트
+        function updateLegend(items) {
+            const legend = document.getElementById('legend');
+            legend.innerHTML = items.map(item => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: ${item.color}"></div>
+                    <span>${item.name}</span>
+                </div>
+            `).join('');
+        }
+
+        // 모드 전환
+        document.getElementById('modeUpdate').addEventListener('click', function() {
+            mode = 'update';
+            this.classList.add('active');
+            document.getElementById('modeMixture').classList.remove('active');
+            document.querySelector('.posterior-title').textContent = '📊 사후확률 통계';
+            updateChart();
+        });
+
+        document.getElementById('modeMixture').addEventListener('click', function() {
+            mode = 'mixture';
+            this.classList.add('active');
+            document.getElementById('modeUpdate').classList.remove('active');
+            document.querySelector('.posterior-title').textContent = '📊 혼합 분포 통계';
+            updateChart();
+        });
+
+        // 초기 분포 추가
+        addDistribution('prior');
+        addDistribution('likelihood');
+    </script>
+</body>
+</html>
